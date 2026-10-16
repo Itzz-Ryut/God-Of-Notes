@@ -1,0 +1,295 @@
+﻿### GoD of NOTES — sanitized REST examples (placeholders only, no real credentials)
+### Base: http://localhost:5000 (PORT in backend/src/config/env.js). Copy locally, never commit real values.
+### Mounts: /api/health, /api/auth, /api/users, /api/documents, /api/authorization, /api/workspaces (see backend/src/app.js).
+### REST clients send no Origin header so originCheck passes; browsers must send the matching FRONTEND_URL origin.
+### Auth: browser HttpOnly cookie (automatic) OR REST Authorization: Bearer <JWT> (authenticate.js accepts either).
+
+### 1. Health (public, 200 {status:"ok"})
+GET http://localhost:5000/api/health
+
+### 2. Register (public, rate-limited 5/15m; 201; 409 if email/username taken)
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "devuser",
+  "email": "you@example.com",
+  "password": "<YOUR_DEV_PASSWORD>"
+}
+
+### 3. Login (public, rate-limited 10/15m; 200 sets HttpOnly access_token cookie + {user})
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "<YOUR_USERNAME_OR_EMAIL>",
+  "password": "<YOUR_DEV_PASSWORD>"
+}
+
+### 4. Verify email (public, OTP rate-limited; body {email,otp:6-digit})
+POST http://localhost:5000/api/auth/verify-email
+Content-Type: application/json
+
+{
+  "email": "you@example.com",
+  "otp": "000000"
+}
+
+### 5. Resend verification (public; body {email})
+POST http://localhost:5000/api/auth/resend-verification
+Content-Type: application/json
+
+{
+  "email": "you@example.com"
+}
+
+### 6. Forgot password (public; always 200 generic message; body {email})
+POST http://localhost:5000/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "you@example.com"
+}
+
+### 7. Reset password (public; body {token,password 8-72 chars})
+POST http://localhost:5000/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "<RESET_TOKEN_FROM_EMAIL_DEV_LOG>",
+  "password": "<YOUR_NEW_DEV_PASSWORD>"
+}
+
+### 8. Logout (public POST, no body; clears cookie; 200)
+POST http://localhost:5000/api/auth/logout
+
+### 9. Google start (public; 302 to accounts.google.com; sets oauth_state cookie)
+GET http://localhost:5000/api/auth/google
+
+### 10. Google callback (browser redirect; needs ?code=&state=; 200 sets cookie)
+GET http://localhost:5000/api/auth/google/callback?code=<CODE>&state=<STATE>
+
+### 11. Current user (auth; 200 {user}; 401 without cookie/Bearer)
+GET http://localhost:5000/api/users/me
+Authorization: Bearer <OWNER_JWT>
+
+### 12. Update username (auth; PATCH {username 1-30}; 200)
+PATCH http://localhost:5000/api/users/me/username
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "username": "devuser2"
+}
+
+### 13. Update identity color (auth; PATCH {identityColor:#RRGGBB}; 200)
+PATCH http://localhost:5000/api/users/me/identity-color
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "identityColor": "#7C3AED"
+}
+
+### 14. Lookup user (auth; ?username=; 200)
+GET http://localhost:5000/api/users/lookup?username=devuser
+Authorization: Bearer <OWNER_JWT>
+
+### 15. List documents (auth; ?search=&state=ACTIVE|OWNER_TRASHED&page=&limit=; 200 {documents:[] metadata only})
+GET http://localhost:5000/api/documents?search=&state=ACTIVE&page=1&limit=20
+Authorization: Bearer <OWNER_JWT>
+
+### 16. Create document (auth; BOTH title 1-255 + content object required; 201)
+POST http://localhost:5000/api/documents
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "title": "My first document",
+  "content": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Hello" }] }] }
+}
+
+### 17. Get document (auth; 200 {document}; 403 if no access with no existence oracle; 404 if missing)
+GET http://localhost:5000/api/documents/<DOCUMENT_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 18. Update document (auth; BOTH title+content required; 200; 403 if cannot edit)
+PATCH http://localhost:5000/api/documents/<DOCUMENT_ID>
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "title": "Updated title",
+  "content": { "type": "doc", "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Updated" }] }] }
+}
+
+### 19. Copy document (auth; NO body; 201 independent ACTIVE copy)
+POST http://localhost:5000/api/documents/<DOCUMENT_ID>/copy
+Authorization: Bearer <OWNER_JWT>
+
+### 20. Trash document (auth; DELETE; 200 -> OWNER_TRASHED; owner only)
+DELETE http://localhost:5000/api/documents/<DOCUMENT_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 21. Restore document (auth; POST; 200 -> ACTIVE)
+POST http://localhost:5000/api/documents/<DOCUMENT_ID>/restore
+Authorization: Bearer <OWNER_JWT>
+
+### 22. Adopt orphaned document (auth; POST {workspaceId} explicit target; 200)
+POST http://localhost:5000/api/documents/<DOCUMENT_ID>/adopt
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "workspaceId": "<WORKSPACE_ID>"
+}
+
+### 23. Permanently remove (auth; DELETE .../permanent; only OWNER_TRASHED; 200, never SQL-deletes)
+DELETE http://localhost:5000/api/documents/<DOCUMENT_ID>/permanent
+Authorization: Bearer <OWNER_JWT>
+
+### 24. Malformed document ID (auth; 400 VALIDATION_ERROR from service validation)
+GET http://localhost:5000/api/documents/not-a-uuid
+Authorization: Bearer <OWNER_JWT>
+
+### 25. List permissions (owner only; 200 {permissions:[]}; 403 non-owner)
+GET http://localhost:5000/api/authorization/documents/<DOCUMENT_ID>/permissions
+Authorization: Bearer <OWNER_JWT>
+
+### 26. Grant permission (owner only; 201; {userId,permission:EDITOR|VIEWER}; 409 duplicate; 404 user/doc missing)
+POST http://localhost:5000/api/authorization/documents/<DOCUMENT_ID>/permissions
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "userId": "<TARGET_USER_ID>",
+  "permission": "VIEWER"
+}
+
+### 27. Update permission (owner only; 200; {permission:EDITOR|VIEWER})
+PATCH http://localhost:5000/api/authorization/documents/<DOCUMENT_ID>/permissions/<TARGET_USER_ID>
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "permission": "EDITOR"
+}
+
+### 28. Revoke permission (owner only; 200)
+DELETE http://localhost:5000/api/authorization/documents/<DOCUMENT_ID>/permissions/<TARGET_USER_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 29. Invalid UUID on permission route (validateUUID BEFORE auth; 400 even with bad token)
+POST http://localhost:5000/api/authorization/documents/not-a-uuid/permissions
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "userId": "<TARGET_USER_ID>",
+  "permission": "VIEWER"
+}
+
+### 30. Create workspace (auth; 201; {name 1-255,description?}; caller becomes OWNER)
+POST http://localhost:5000/api/workspaces
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "name": "My workspace",
+  "description": "Optional"
+}
+
+### 31. List workspaces (auth; 200)
+GET http://localhost:5000/api/workspaces
+Authorization: Bearer <OWNER_JWT>
+
+### 32. Get workspace (auth member only; 403 non-member)
+GET http://localhost:5000/api/workspaces/<WORKSPACE_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 33. Update workspace (OWNER only; PATCH {name,description})
+PATCH http://localhost:5000/api/workspaces/<WORKSPACE_ID>
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "name": "Renamed",
+  "description": "Optional"
+}
+
+### 34. Transfer ownership (OWNER only; PATCH {userId}; recipient must already be member)
+PATCH http://localhost:5000/api/workspaces/<WORKSPACE_ID>/owner
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "userId": "<TARGET_USER_ID>"
+}
+
+### 35. Add member (OWNER only; 201; {userId,role:EDITOR|VIEWER}; direct membership, no invite)
+POST http://localhost:5000/api/workspaces/<WORKSPACE_ID>/members
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "userId": "<TARGET_USER_ID>",
+  "role": "EDITOR"
+}
+
+### 36. List members (any ACTIVE member; 403 non-member)
+GET http://localhost:5000/api/workspaces/<WORKSPACE_ID>/members
+Authorization: Bearer <OWNER_JWT>
+
+### 37. Update member role (OWNER only; PATCH {role:EDITOR|VIEWER}, never OWNER here)
+PATCH http://localhost:5000/api/workspaces/<WORKSPACE_ID>/members/<TARGET_USER_ID>
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "role": "VIEWER"
+}
+
+### 38. Remove member (OWNER only; cannot remove OWNER)
+DELETE http://localhost:5000/api/workspaces/<WORKSPACE_ID>/members/<TARGET_USER_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 39. Leave workspace (member self; OWNER denied until transfer)
+DELETE http://localhost:5000/api/workspaces/<WORKSPACE_ID>/members/me
+Authorization: Bearer <OWNER_JWT>
+
+### 40. Add document to workspace (OWNER/EDITOR; POST {documentId}; idempotent via unique index)
+POST http://localhost:5000/api/workspaces/<WORKSPACE_ID>/documents
+Authorization: Bearer <OWNER_JWT>
+Content-Type: application/json
+
+{
+  "documentId": "<DOCUMENT_ID>"
+}
+
+### 41. List workspace documents (any ACTIVE member; read-only)
+GET http://localhost:5000/api/workspaces/<WORKSPACE_ID>/documents
+Authorization: Bearer <OWNER_JWT>
+
+### 42. Remove association (OWNER/EDITOR; trash ACTIVE->WORKSPACE_TRASHED; never touches document)
+DELETE http://localhost:5000/api/workspaces/<WORKSPACE_ID>/documents/<DOCUMENT_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 43. Restore association (OWNER/EDITOR; POST .../restore)
+POST http://localhost:5000/api/workspaces/<WORKSPACE_ID>/documents/<DOCUMENT_ID>/restore
+Authorization: Bearer <OWNER_JWT>
+
+### 44. Trash workspace (OWNER only; DELETE -> TRASHED)
+DELETE http://localhost:5000/api/workspaces/<WORKSPACE_ID>
+Authorization: Bearer <OWNER_JWT>
+
+### 45. Restore workspace (OWNER only; POST .../restore -> ACTIVE)
+POST http://localhost:5000/api/workspaces/<WORKSPACE_ID>/restore
+Authorization: Bearer <OWNER_JWT>
+
+### 46. Permanently delete workspace (OWNER+TRASHED only; IRREVERSIBLE; cascades memberships/associations, never documents/users)
+DELETE http://localhost:5000/api/workspaces/<WORKSPACE_ID>/permanent
+Authorization: Bearer <OWNER_JWT>
+
+### 47. Delete account (auth; DELETE /api/users/me; no body; triggers ownerless lifecycle)
+DELETE http://localhost:5000/api/users/me
+Authorization: Bearer <OWNER_JWT>

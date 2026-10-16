@@ -1,0 +1,25 @@
+# Dependencies
+**/node_modules/
+
+# Build output
+**/dist/
+
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+**/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code local state
+.vscode/*
+!.vscode/extensions.json
+
+# Local debug / harness artifacts (never commit; may contain test credentials)
+.playwright-mcp/
+frontend/dist-harness/

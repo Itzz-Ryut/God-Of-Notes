@@ -1,0 +1,1911 @@
+:root {
+  --bg: #fff;
+  --text: #1f2937;
+  --accent: #aa3bff;
+  --accent-strong: #8a21d6;
+  --border: #d1d5db;
+  --muted: #6b7280;
+  --error: #dc2626;
+  --input-bg: #ffffff;
+
+  color: var(--text);
+  background: var(--bg);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16171d;
+    --text: #e5e7eb;
+    --border: #374151;
+    --muted: #9ca3af;
+    --input-bg: #1f2937;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+.app {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.app h1 {
+  color: var(--accent);
+  margin: 0;
+}
+
+.app p {
+  margin: 0;
+}
+
+/* --- Authentication pages (F2.2) --- */
+
+.auth-page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 24rem;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--input-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.auth-brand {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+.auth-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-input {
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.form-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--error);
+}
+
+.form-error {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 10%, transparent);
+  border: 1px solid var(--error);
+  border-radius: 0.5rem;
+}
+
+.btn {
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--accent-strong);
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  color: var(--accent-strong);
+  background: transparent;
+  border: 1px solid var(--accent-strong);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-strong) 10%, transparent);
+}
+
+.btn-google {
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  font-weight: 500;
+}
+
+.btn-google:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--border) 15%, transparent);
+}
+
+.google-icon {
+  flex-shrink: 0;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.auth-links a {
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.auth-success {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.auth-success p {
+  margin: 0 0 0.75rem;
+}
+
+/* --- Protected-route / auth-navigation states (F2.6) --- */
+
+.route-loading {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.auth-error-screen {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.auth-error-screen h1 {
+  margin: 0;
+  color: var(--error);
+}
+
+.auth-error-screen p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.home-sub {
+  color: var(--muted);
+}
+
+/* --- Application route placeholders (F3.1) / 404 fallback --- */
+
+.placeholder-page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+/* The standalone 404 fallback uses this base (inside the shell the pages are
+   restyled with the shell tokens). Editorial serif heading per the F3.11
+   typography direction — no font dependency. */
+.placeholder-page h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.placeholder-page p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 34rem;
+}
+
+.placeholder-page a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.placeholder-page a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* --- Application shell (F3.2) + sidebar navigation (F3.3) --- */
+
+/*
+ * Minimal cool-neutral design tokens for the shell (UI.md direction):
+ * scoped to .app-shell so the F2 auth pages, which still use the original
+ * global tokens, are untouched. Light/dark follows the existing
+ * prefers-color-scheme pattern.
+ */
+.app-shell {
+  --app-bg: #f5f6f7;
+  --app-surface: #ffffff;
+  --app-text: #202124;
+  --app-text-muted: #6b7075;
+  --app-border: #dde1e3;
+  --app-accent: #8fb2ac; /* sage — used sparingly for active/selected states */
+  --app-ink: #2d0d18; /* deep ink emphasis, never a global theme */
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-shell {
+    --app-bg: #111315;
+    --app-surface: #181b1d;
+    --app-text: #f1f2f0;
+    --app-text-muted: #9a9f9f;
+    --app-border: #2a2e30;
+  }
+}
+
+.app-shell {
+  min-height: 100svh;
+  display: flex;
+  color: var(--app-text);
+  background: var(--app-bg);
+}
+
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 13.5rem;
+  flex-shrink: 0;
+  padding: 1.25rem 0.875rem;
+  border-right: 1px solid var(--app-border);
+  background: var(--app-surface);
+}
+
+.app-sidebar-brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--app-text);
+  padding: 0 0.5rem;
+}
+
+.app-sidebar-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.app-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.45rem 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--app-text-muted);
+  text-decoration: none;
+  border-radius: 0.375rem;
+}
+
+.app-sidebar-link:hover {
+  color: var(--app-text);
+  background: color-mix(in srgb, var(--app-border) 40%, transparent);
+}
+
+.app-sidebar-link:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+}
+
+/* Active navigation: subtle sage emphasis, never loud, and not color-only —
+   the weight increase and inset left indicator carry the state too. */
+.app-sidebar-link--active {
+  color: var(--app-text);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--app-accent) 24%, transparent);
+  box-shadow: inset 2px 0 0 var(--app-accent);
+}
+
+.app-sidebar-icon {
+  flex-shrink: 0;
+  color: currentColor;
+  opacity: 0.75;
+}
+
+.app-shell-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-topbar {
+  height: 3rem;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--app-bg);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--app-border);
+  /* Account area (F3.4) lives on the right; the responsive navigation
+     trigger (F3.8) and user menu (F3.5) populate this bar. */
+}
+
+.app-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  /* Pushes the account area to the right on every viewport. */
+  margin-right: auto;
+}
+
+.app-topbar-menu-trigger {
+  display: none; /* Desktop: the sidebar is always visible. */
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font: inherit;
+  color: var(--app-text);
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.app-topbar-menu-trigger:hover {
+  background: color-mix(in srgb, var(--app-border) 40%, transparent);
+}
+
+.app-topbar-menu-trigger:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+}
+
+.app-topbar-menu-icon {
+  display: block;
+}
+
+.app-topbar-brand-mobile {
+  display: none; /* Desktop: the sidebar carries the brand. */
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--app-text);
+  white-space: nowrap;
+}
+
+.app-topbar-user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.app-topbar-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 0.25rem 0.375rem;
+  margin: -0.25rem -0.375rem;
+  font: inherit;
+  color: var(--app-text);
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.app-topbar-trigger:hover {
+  background: color-mix(in srgb, var(--app-border) 40%, transparent);
+}
+
+.app-topbar-trigger:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+}
+
+.app-topbar-username {
+  font-size: 0.875rem;
+  color: var(--app-text);
+  /* Long usernames truncate instead of overflowing the header. */
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-topbar-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  /* Fallback identity when the backend provides no identityColor; the
+     backend-provided color, when present, is applied inline. */
+  background: var(--app-accent);
+}
+
+/* Compact account menu (F3.5): attached to the trigger, cool-neutral surface,
+   restrained shadow — no dashboard panel, no invented entries. */
+.app-account-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 10;
+  min-width: 10rem;
+  padding: 0.375rem;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.app-account-menu-header {
+  margin: 0;
+  padding: 0.4rem 0.5rem 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+  border-bottom: 1px solid var(--app-border);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-account-menu-error {
+  margin: 0.375rem 0.25rem;
+  padding: 0.375rem 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 10%, transparent);
+  border-radius: 0.375rem;
+}
+
+.app-account-menu-item {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.45rem 0.5rem;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  color: var(--app-text);
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.app-account-menu-item:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--app-border) 40%, transparent);
+}
+
+.app-account-menu-item:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+
+.app-account-menu-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Subtle mobile backdrop behind the open sidebar (F3.8). A real button so it
+   is keyboard-activatable; hidden on desktop by the media query below. */
+.app-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  padding: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.app-sidebar-backdrop:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -4px;
+}
+
+/*
+ * F3.8 — single deliberate breakpoint (48rem). Desktop layout is untouched;
+ * everything below turns the sidebar off-canvas and shows the Topbar
+ * trigger + compact brand. No second framework, no extra breakpoints.
+ */
+@media (max-width: 47.999rem) {
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 30;
+    transform: translateX(-100%);
+    visibility: hidden; /* removes the closed panel from tab order and the a11y tree */
+    transition: transform 0.2s ease, visibility 0.2s ease;
+  }
+
+  .app-sidebar--open {
+    transform: none;
+    visibility: visible;
+  }
+
+  .app-topbar-menu-trigger {
+    display: inline-flex;
+  }
+
+  .app-topbar-brand-mobile {
+    display: block;
+  }
+
+  .app-sidebar-backdrop {
+    display: block;
+  }
+
+  /* Small screens: keep the header calm and the username from crowding the
+     trigger/brand; the avatar and account menu stay usable. */
+  .app-topbar-username {
+    max-width: 8rem;
+    font-size: 0.8125rem;
+  }
+
+  .app-main .placeholder-page {
+    padding: 1rem;
+  }
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 48rem) {
+  .app-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    /* Include the 1.25rem top/bottom padding in the 100svh height: without
+       border-box (no global reset exists) the sidebar rendered ~2.5rem taller
+       than the viewport, and overflow-y:auto on the whole panel let the logo
+       scroll/clip. The panel itself never scrolls now. */
+    box-sizing: border-box;
+    overflow: visible;
+    align-self: flex-start;
+  }
+  /* On short viewports only the nav links scroll; the brand stays pinned. */
+  .app-sidebar-brand {
+    flex-shrink: 0;
+  }
+  .app-sidebar-nav {
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
+/* Placeholder pages live full-viewport when outside the shell (404), but
+   inside the shell they fill the content area and use the shell's
+   cool-neutral tokens instead of the legacy purple accents. */
+.app-main .placeholder-page {
+  min-height: 100%;
+}
+
+/* Editorial serif for major product headings — the F3.11 typography
+   hierarchy direction (system serif; no font dependency). */
+.app-main .placeholder-page h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  letter-spacing: 0.01em;
+  color: var(--app-text);
+}
+
+.app-main .placeholder-page p {
+  color: var(--app-text-muted);
+  max-width: 34rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Quiet reference metadata on detail-route placeholders (routed id) —
+   keeps route testing understandable without developer-style output. */
+.app-main .placeholder-page .placeholder-reference {
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+  opacity: 0.8;
+}
+
+.app-main .placeholder-page a {
+  color: var(--app-text);
+  text-decoration: underline;
+  text-decoration-color: var(--app-accent);
+  text-underline-offset: 2px;
+}
+
+/* Recovery actions (error boundary fallback): the shell renders the legacy
+   .btn classes from the auth pages, but scoped to the shell they follow the
+   cool-neutral system instead of the legacy purple. Auth pages are outside
+   .app-shell and untouched. */
+.app-shell .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.app-shell .btn-primary {
+  color: #fff;
+  background: var(--app-ink);
+}
+
+.app-shell .btn-primary:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.app-shell .btn-primary:focus-visible,
+.app-shell .btn-secondary:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+}
+
+.app-shell .btn-secondary {
+  color: var(--app-text);
+  background: transparent;
+  border: 1px solid var(--app-border);
+  text-decoration: none;
+}
+
+.app-shell .btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--app-border) 30%, transparent);
+}
+
+.placeholder-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/*
+ * F4.1 — Documents pages (data-backed).
+ *
+ * Minimal, cool-neutral, document-focused; uses the existing shell tokens
+ * only. Replaces the F3 placeholder pages without redesigning the shell.
+ */
+
+.documents-page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.documents-page h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  letter-spacing: 0.01em;
+  color: var(--app-text);
+}
+
+.documents-page p {
+  margin: 0;
+  color: var(--app-text-muted);
+}
+
+.documents-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.document-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.document-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  color: var(--app-text);
+  text-decoration: none;
+  background: transparent;
+}
+
+.document-link:hover {
+  background: color-mix(in srgb, var(--app-border) 20%, transparent);
+}
+
+.document-link:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+}
+
+.document-title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+
+.document-detail-title {
+  overflow-wrap: anywhere;
+}
+
+.document-meta-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.document-meta-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.document-meta-row dt {
+  width: 5.5rem;
+  color: var(--app-text-muted);
+}
+
+.document-meta-row dd {
+  margin: 0;
+  color: var(--app-text);
+}
+
+.document-edit-note {
+  margin-top: 0.5rem;
+}
+
+/*
+ * F4.2 — Documents discovery controls (search / state filter / pagination).
+ * Part of the existing Documents page — same tokens, no new design system.
+ */
+
+.documents-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.documents-search {
+  flex: 1 1 14rem;
+}
+
+.documents-state-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.documents-state-filter .form-input {
+  width: auto;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+}
+
+.documents-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.documents-pagination .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.documents-pagination-status {
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+/*
+ * F4.3 — Document creation. An intentionally simple inline panel native to
+ * the Documents page; reuses the existing form/button conventions.
+ */
+
+.documents-heading-actions {
+  margin-bottom: 0.25rem;
+}
+
+.create-document-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+}
+
+.create-document-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.create-document-error {
+  color: var(--error);
+}
+
+.create-document-status {
+  font-size: 0.875rem;
+}
+
+.create-document-form .documents-actions {
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 47.999rem) {
+  .documents-page {
+    padding: 1rem;
+  }
+}
+
+/*
+ * F5.1 — Document editor foundation.
+ *
+ * A calm, document-focused workspace over the authoritative GET detail
+ * content. Same cool-neutral shell tokens and editorial serif direction as
+ * the rest of the app; no new design system, no editor dependency.
+ */
+
+.document-editor {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.document-editor-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--app-text);
+  overflow-wrap: anywhere;
+}
+
+.document-editor-content {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--app-text);
+  overflow-wrap: anywhere;
+}
+
+.document-editor-content > * + * {
+  margin-top: 1rem;
+}
+
+.document-editor-content p {
+  margin: 0;
+}
+
+.document-editor-content h1,
+.document-editor-content h2,
+.document-editor-content h3,
+.document-editor-content h4,
+.document-editor-content h5,
+.document-editor-content h6 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--app-text);
+}
+
+.document-editor-content h2 {
+  font-size: 1.375rem;
+}
+
+.document-editor-content h3 {
+  font-size: 1.1875rem;
+}
+
+.document-editor-content ul,
+.document-editor-content ol {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.document-editor-content li {
+  margin-top: 0.25rem;
+}
+
+.document-editor-content blockquote {
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--app-border);
+  color: var(--app-text-muted);
+}
+
+.document-editor-content pre {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--app-border) 25%, transparent);
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  font-size: 0.9375rem;
+  white-space: pre-wrap;
+}
+
+.document-editor-content code,
+.document-inline-code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.document-editor-content .document-inline-code {
+  background: color-mix(in srgb, var(--app-border) 30%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.3rem;
+}
+
+.document-editor-empty {
+  color: var(--app-text-muted);
+  font-style: italic;
+}
+
+/* F5.2 — editing + save additions (same calm tokens). */
+.document-title-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.document-title-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+
+.document-title-input {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--app-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  margin: 0 -0.5rem;
+}
+
+.document-title-input:hover {
+  border-color: var(--app-border);
+}
+
+.document-title-input:focus {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+  border-color: var(--app-accent);
+  background: var(--app-surface);
+}
+
+.document-field-error,
+.document-save-error {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--error);
+}
+
+.document-savebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--app-border);
+  border-bottom: 1px solid var(--app-border);
+  font-size: 0.875rem;
+}
+
+.document-dirty {
+  color: var(--app-text-muted);
+  font-style: italic;
+}
+
+.document-clean {
+  color: var(--app-text-muted);
+}
+
+.document-save-notice {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.document-save-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+
+.document-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.document-toolbar-button {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--app-text);
+  background: transparent;
+  border: 1px solid var(--app-border);
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.document-toolbar-button:hover {
+  border-color: var(--app-accent);
+  color: var(--app-accent);
+}
+
+.document-editor-editable .ProseMirror {
+  outline: none;
+  min-height: 12rem;
+  caret-color: var(--app-accent);
+}
+
+.document-editor-editable .ProseMirror:focus {
+  outline: none;
+}
+
+.document-editor-editable .ProseMirror p {
+  margin: 0;
+}
+
+.document-editor-editable .ProseMirror > * + * {
+  margin-top: 0.875rem;
+}
+
+.document-editor-editable .ProseMirror-selectednode {
+  outline: 2px solid var(--app-accent);
+}
+
+.document-editor-header {
+  position: sticky;
+  top: 3rem;
+  z-index: 5;
+  background: var(--app-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--app-border);
+}
+.document-editor-header-top {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+@media (max-width: 47.999rem) {
+  .document-editor {
+    padding: 1rem;
+  }
+  .document-editor-header {
+    top: 3rem;
+    gap: 0.5rem;
+  }
+  .document-toolbar {
+    row-gap: 0.5rem;
+  }
+}
+
+/* --- F6.2 — Share panel --- */
+.share-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: share-fade-in 0.15s ease;
+}
+
+@keyframes share-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.share-panel {
+  width: 100%;
+  max-width: 28rem;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.share-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.share-panel-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.share-panel-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--app-text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+}
+
+.share-panel-close:hover {
+  color: var(--app-text);
+  background: color-mix(in srgb, var(--app-border) 30%, transparent);
+}
+
+.share-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.share-section-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.share-search-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--app-text);
+  background: var(--input-bg);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+}
+
+.share-search-input:focus {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+  border-color: var(--app-accent);
+}
+
+.share-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--app-surface);
+}
+
+.share-search-result {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--app-border);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--app-text);
+}
+
+.share-search-result:last-child {
+  border-bottom: none;
+}
+
+.share-search-result:hover,
+.share-search-result[aria-selected="true"] {
+  background: color-mix(in srgb, var(--app-accent) 10%, transparent);
+}
+
+.share-user-color-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ========================================== */
+/* Save-status semantics (brief: green/amber/red) */
+/* ========================================== */
+
+.app-shell {
+  /* Color semantics: green = saved; amber = saving or unsaved; red = save/load error. */
+  --app-saved: #15803d;
+  --app-saving: #ca8a04;
+  --app-error: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-shell {
+    --app-saved: #4d7c0f;
+    --app-saving: #b45309;
+    --app-error: #dc2626;
+  }
+}
+
+/* Save status: never color alone — an icon/dot and readable text are always present. */
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.save-dot {
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: transparent;
+}
+.save-dot--saved {
+  background: var(--app-saved);
+  border-color: var(--app-saved);
+}
+.save-dot--unsaved {
+  background: var(--app-saving);
+  border-color: var(--app-saving);
+}
+.save-dot--saving {
+  background: transparent;
+  border-style: dashed;
+  animation: save-dot-pulse 1.2s ease-in-out infinite;
+}
+.save-dot--error {
+  background: var(--app-error);
+  border-color: var(--app-error);
+}
+@keyframes save-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.save-text {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--app-text);
+}
+.save-text--error {
+  color: var(--app-error);
+}
+
+/* ========================================== */
+/* Editor polish: back link, title, toolbar, content */
+/* ========================================== */
+
+.document-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+.document-breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--app-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+.document-breadcrumb-link:hover,
+.document-breadcrumb-link:focus-visible {
+  color: var(--app-text);
+}
+.document-breadcrumb-link:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+.document-back-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.document-title-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.document-title-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+.document-title-input {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--app-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  margin: 0 -0.5rem;
+}
+
+/* Documents list: section, primary action, filter card, cards */
+.documents-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.documents-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.documents-heading h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.documents-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.documents-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--app-ink);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.documents-new:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+.documents-new:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+.documents-new:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.documents-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  background: var(--app-surface);
+}
+.documents-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.documents-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1 1 14rem;
+}
+.documents-filter-label {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+.documents-search {
+  flex: 1 1 14rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+}
+.documents-search:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 1px;
+  border-color: var(--app-accent);
+}
+.document-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.document-item {
+  list-style: none;
+}
+.document-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  color: var(--app-text);
+  text-decoration: none;
+  background: var(--app-surface);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+.document-link:hover,
+.document-link:focus-visible {
+  border-color: var(--app-accent);
+  background: color-mix(in srgb, var(--app-surface) 92%, var(--app-accent));
+  outline: none;
+}
+.document-link:active {
+  transform: scale(0.995);
+}
+.document-title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--app-text);
+  overflow-wrap: anywhere;
+}
+.document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+.document-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--app-border) 55%, transparent);
+  color: var(--app-text-muted);
+}
+
+/* Responsive: single column, relaxed filters on narrow screens. */
+@media (max-width: 47.999rem) {
+  .documents-heading {
+    flex-direction: column;
+  }
+  .documents-filter {
+    padding: 0.75rem;
+  }
+  .document-link {
+    padding: 0.75rem 0.85rem;
+  }
+}
+
+/* Editor toolbar: grouped sections, each with a visually quiet label. */
+.document-toolbar-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+}
+.document-toolbar-section-label {
+  flex: 0 0 auto;
+  width: fit-content;
+  padding: 0 0.35rem 0 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--app-text-muted);
+}
+
+.share-user-username {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-status-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.share-status-error {
+  color: var(--error);
+}
+
+.share-permission-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.share-permission-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  background: var(--app-surface);
+}
+
+.share-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.share-permission-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--app-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.share-grant-section {
+  padding-top: 1rem;
+  border-top: 1px solid var(--app-border);
+}
+
+.share-role-selector {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.share-role-option {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--app-text);
+  cursor: pointer;
+}
+
+.share-role-option input[type="radio"] {
+  accent-color: var(--app-accent);
+}
+
+.share-edit-role {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.share-role-select {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.375rem;
+  background: var(--input-bg);
+  color: var(--app-text);
+}
+
+.share-permission-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.share-change-btn,
+.share-remove-btn {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  font-weight: 500;
+}
+
+.share-remove-btn {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.share-remove-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--error) 8%, transparent);
+}
+
+.share-confirm-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: share-fade-in 0.15s ease;
+}
+
+.share-confirm-body {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  max-width: 22rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.share-confirm-text {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+  color: var(--app-text);
+  font-size: 1rem;
+}
+
+.share-confirm-detail {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+}
+
+.share-confirm-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.share-mutation-error {
+  padding: 0.75rem;
+  border: 1px solid var(--error);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--error) 6%, transparent);
+}
+
+.share-owner-section {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--app-border);
+}
+
+.share-owner-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--app-accent) 8%, transparent);
+}
+
+.share-owner-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--app-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.share-owner-value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.share-owner-note {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+
+.document-savebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.document-savebar-actions .document-share-trigger {
+  font-size: 0.875rem;
+  padding: 0.45rem 0.75rem;
+  font-weight: 500;
+}
+
+.share-panel-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive share panel */
+@media (max-width: 47.999rem) {
+  .share-panel {
+    padding: 1rem;
+    max-height: 92vh;
+  }
+
+  .share-panel-title {
+    font-size: 1rem;
+  }
+}
