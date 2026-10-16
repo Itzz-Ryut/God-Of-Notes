@@ -13,4 +13,3 @@ _checkpoints/
 
 *.tmp
 *.out
-.claude/settings.local.json
