@@ -11,6 +11,8 @@ import {
   logout,
 } from "./auth.controller.js";
 
+import { googleEnabled } from "./google.service.js";
+
 import authenticate from "../../middleware/authenticate.js";
 import {   
   loginRateLimit,
@@ -33,8 +35,10 @@ router.post("/reset-password",resetPasswordRateLimit, resetPassword);
 
 router.post("/logout",logout);
 
-router.get("/google",googleRateLimit, googleLogin);
-router.get("/google/callback",googleRateLimit, googleCallback);
+if (googleEnabled) {
+  router.get("/google",googleRateLimit, googleLogin);
+  router.get("/google/callback",googleRateLimit, googleCallback);
+}
 
 
 export default router;

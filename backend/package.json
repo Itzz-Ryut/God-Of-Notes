@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test src/modules/auth/google.service.configured.test.js && node --test src/modules/auth/google.service.unconfigured.test.js"
   },
   "keywords": [],
   "author": "",

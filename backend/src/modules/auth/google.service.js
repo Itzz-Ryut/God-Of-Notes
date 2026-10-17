@@ -2,13 +2,31 @@ import { OAuth2Client } from "google-auth-library";
 
 import env from "../../config/env.js";
 
-const googleClient = new OAuth2Client(
-  env.googleClientId,
-  env.googleClientSecret,
-  env.googleRedirectUri,
+const googleClientId = env.googleClientId;
+const googleClientSecret = env.googleClientSecret;
+const googleRedirectUri = env.googleRedirectUri;
+
+const googleEnabled = Boolean(
+  googleClientId && googleClientSecret && googleRedirectUri,
 );
 
+let googleClient = null;
+
+if (googleEnabled) {
+  googleClient = new OAuth2Client(
+    googleClientId,
+    googleClientSecret,
+    googleRedirectUri,
+  );
+}
+
 const getGoogleAuthorizationUrl = (state) => {
+  if (!googleEnabled) {
+    throw new Error("Google OAuth is not configured on this server.");
+  }
+  if (!googleClient) {
+    throw new Error("Google OAuth client is not initialised.");
+  }
   return googleClient.generateAuthUrl({
     access_type: "offline",
     scope: ["openid", "email", "profile"],
@@ -18,6 +36,9 @@ const getGoogleAuthorizationUrl = (state) => {
 };
 
 const getGoogleUser = async (code) => {
+  if (!googleEnabled) {
+    throw new Error("Google OAuth is not configured on this server.");
+  }
   if (!code) {
     throw new Error("Google authorization code is required");
   }
@@ -52,4 +73,4 @@ const getGoogleUser = async (code) => {
   };
 };
 
-export { googleClient, getGoogleAuthorizationUrl, getGoogleUser };
+export { googleClient, getGoogleAuthorizationUrl, getGoogleUser, googleEnabled };
