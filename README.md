@@ -1,6 +1,31 @@
 ﻿# GoD of NOTES
 
+Live Demo: https://god-of-notes.vercel.app
+
+A real-time collaborative document and workspace application built with React, Node.js, Express, and PostgreSQL.
+
+Tech Stack: React · Vite · Node.js · Express · PostgreSQL
+
 A collaborative notes application with documents, workspaces, sharing/permissions, and lifecycle (trash / recover / orphan handling).
+
+
+## Screenshots
+
+### Login Page
+![Login Page](docs/screenshots/login_page.png)
+
+### Documents Dashboard
+![Documents Dashboard](docs/screenshots/documents_dashboard.png)
+
+### Document Editor
+![Document Editor](docs/screenshots/document_editor.png)
+
+### Workspace Dashboard 
+![Workspace Dashboard](docs/screenshots/workspace_dashboard.png)
+
+### Workspace Docs 
+![Workspace Docs](docs/screenshots/workspace_docs.png)
+
 
 > Portfolio snapshot. This README describes only what has been verified in source. Build and test results below are historical development-phase observations, NOT re-verified in this snapshot. See “What is not yet verified” and `docs/ARCHITECTURE.md`.
 
