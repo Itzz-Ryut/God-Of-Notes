@@ -24,6 +24,7 @@ import verifyOrigin from "./middleware/originCheck.js";
 import { log } from "console";
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(helmet());
 
