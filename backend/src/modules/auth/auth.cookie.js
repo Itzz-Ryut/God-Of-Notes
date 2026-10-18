@@ -3,7 +3,7 @@ const ACCESS_TOKEN_COOKIE = "access_token";
 const getAccessTokenCookieOptions = () => ({
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge: 15 * 60 * 1000,
   path: "/",
 });
