@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { authApi } from './auth.api.js'
 import { getAuthErrorMessage, getAuthFieldErrors } from './authErrors.js'
+import { ApiError } from '../../lib/api/errors.js'
 import GoogleAuthButton from './GoogleAuthButton.jsx'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -71,11 +72,35 @@ function RegisterPage() {
       setFormError(null)
     } catch (err) {
       setFieldErrors(getAuthFieldErrors(err))
-      setFormError(
-        getAuthErrorMessage(err, {
-          fallback: 'Unable to create your account. Please try again.',
-        }),
-      )
+      const normalizedEmail = email.trim()
+      const isAlreadyExists = err instanceof ApiError && err.code === 'EMAIL_ALREADY_EXISTS'
+      const recoveryLink = normalizedEmail ? (
+        <Link to="/verify-email" state={{ email: normalizedEmail }}>
+          Verify your email
+        </Link>
+      ) : null
+      if (isAlreadyExists) {
+        setFormError(
+          <>
+            An account with this email already exists. If you just created it,{' '}
+            {recoveryLink || 'please verify your email'} before signing in.
+          </>
+        )
+      } else {
+        setFormError(
+          <>
+            {getAuthErrorMessage(err, {
+              fallback: 'Unable to create your account. Please try again.',
+            })}
+            {normalizedEmail ? (
+              <>
+                {' '}If an account was created,{' '}
+                {recoveryLink || 'please verify your email'} before signing in.
+              </>
+            ) : null}
+          </>
+        )
+      }
     } finally {
       setIsSubmitting(false)
     }

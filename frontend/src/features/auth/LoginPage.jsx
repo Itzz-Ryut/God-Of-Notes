@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "./auth.context.jsx";
 import { authApi } from "./auth.api.js";
 import { getAuthErrorMessage, getAuthFieldErrors } from "./authErrors.js";
+import { ApiError } from "../../lib/api/errors.js";
 import GoogleAuthButton from "./GoogleAuthButton.jsx";
 
 /**
@@ -81,10 +82,26 @@ function LoginPage() {
       });
     } catch (err) {
       setFieldErrors(getAuthFieldErrors(err));
+      const normalizedIdentifier = identifier.trim();
+      const isNotVerified = err instanceof ApiError && err.code === 'EMAIL_NOT_VERIFIED';
+      const isEmail = normalizedIdentifier.includes('@');
+      const verifyLink = isNotVerified ? (
+        <Link to="/verify-email" state={isEmail ? { email: normalizedIdentifier } : undefined}>
+          Verify your email
+        </Link>
+      ) : null;
       setFormError(
-        getAuthErrorMessage(err, {
-          fallback: "Unable to sign in. Please try again.",
-        }),
+        <>
+          {getAuthErrorMessage(err, {
+            fallback: "Unable to sign in. Please try again.",
+          })}
+          {isNotVerified && (
+            <>
+              <br />
+              {verifyLink || 'Please verify your email before signing in.'}
+            </>
+          )}
+        </>
       );
     } finally {
       setIsSubmitting(false);
