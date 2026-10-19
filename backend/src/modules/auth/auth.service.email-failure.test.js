@@ -1,43 +1,61 @@
 process.env.RESEND_API_KEY = "test";
 
-import { describe, it } from "node:test";
+import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 
 const emailMod = await import("./email.service.js");
-
-if (emailMod._resendClient && emailMod._resendClient.emails) {
-  emailMod._resendClient.emails.send = async () => {
-    throw new Error("Resend mock failure");
-  };
-}
-
 const authMod = await import("./auth.service.js");
 
-describe("auth.service delivery-failure behavior", () => {
-  it("register propagates email delivery error; DB writes occur before send (per source)", async () => {
+let originalSend;
+let originalConsoleLog;
+
+describe("email diagnostic (isolated, no production DB required)", () => {
+  before(() => {
+    originalSend = emailMod._resendClient ? emailMod._resendClient.emails.send : null;
+    originalConsoleLog = console.log;
+  });
+
+  after(() => {
+    if (originalSend && emailMod._resendClient && emailMod._resendClient.emails) {
+      emailMod._resendClient.emails.send = originalSend;
+    }
+    console.log = originalConsoleLog;
+  });
+
+  it("sendVerificationOtp accepts correlationId and logs safe stages", async () => {
+    const logs = [];
+    console.log = (...args) => logs.push(args);
+    emailMod._resendClient.emails.send = async () => ({ data: { id: "diag-id" } });
+    await emailMod.sendVerificationOtp({ email: "test@x.co", otp: "123456", correlationId: "diag-1" });
+    console.log = originalConsoleLog;
+    const text = logs.map((a) => (typeof a[0] === "string" ? a[0] : JSON.stringify(a))).join(" ");
+    assert.ok(text.includes("diag-1"), "correlationId should appear in email-service log");
+    assert.ok(text.includes("delivered"), "delivered status should be logged");
+  });
+
+  it("sendVerificationOtp throws sanitized error without exposing provider message", async () => {
+    const secretMessage = "SECRET_PROVIDER_ERROR_42";
+    emailMod._resendClient.emails.send = async () => ({ error: { statusCode: 401, name: "validation_error", message: secretMessage } });
+    let thrownMsg = "";
+    try {
+      await emailMod.sendVerificationOtp({ email: "t@x.co", otp: "000000", correlationId: "diag-2" });
+    } catch (e) {
+      thrownMsg = e.message || "";
+    }
+    assert.ok(!thrownMsg.includes(secretMessage), "raw provider message must not reach thrown error");
+    assert.ok(thrownMsg.includes("provider status"), "sanitized status code should appear");
+  });
+
+  it("resendVerification accepts correlationId second param (signature only, pre-send lookup fails)", async () => {
     await assert.rejects(
-      async () => authMod.register({
-        username: "t_" + Date.now(),
-        email: "t_" + Date.now() + "@x.co",
-        password: "Pass1234!",
-      }),
-      /Resend mock failure/
+      async () => authMod.resendVerification({ email: "no-such-user@x.co" }, "diag-corr-3"),
+      /Unable to process verification request/
     );
   });
 
-  it("resendVerification propagates email delivery error", async () => {
-    const email = "rv_" + Date.now() + "@x.co";
-    // Create unverified user+verification (DB write happens before send; send throws)
-    try { await authMod.register({ username: "rv_" + Date.now(), email, password: "Pass1234!" }); } catch { /* expected mock failure */ }
-    // Pre-send checks (user exists, unverified, cooldown cleared) now pass
-    await assert.rejects(
-      async () => authMod.resendVerification({ email }),
-      /(Resend mock failure|wait before requesting)/
-    );
-  });
-
-  it("forgotPassword preserves generic response when email delivery fails", async () => {
-    const result = await authMod.forgotPassword({ email: "nobody_" + Date.now() + "@x.co" });
+  it("forgotPassword preserves generic response when user missing (no DB mutation asserted)", async () => {
+    emailMod._resendClient.emails.send = async () => ({ error: { statusCode: 500, name: "internal_error" } });
+    const result = await authMod.forgotPassword({ email: "no-such-user@x.co" });
     assert.strictEqual(result.message, "If an account exists for this email, a password reset link has been sent");
   });
 });

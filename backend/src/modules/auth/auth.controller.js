@@ -41,9 +41,18 @@ const verifyEmail = asyncHandler(async (req, res) => {
 });
 
 const resendVerification = asyncHandler(async (req, res) => {
-  const result = await authService.resendVerification(req.body);
-
-  res.status(200).json(result);
+  const rawId = req.headers["x-request-id"];
+  const correlationId = (typeof rawId === "string" && /^[a-zA-Z0-9._-]{1,64}$/.test(rawId)) ? rawId : `resend-ctrl-${Date.now()}`;
+  const startMs = Date.now();
+  console.log(JSON.stringify({ service: "auth-controller", stage: "resend-verification-request", correlationId, timestamp: new Date().toISOString(), method: req.method, path: req.path }));
+  try {
+    const result = await authService.resendVerification(req.body, correlationId);
+    console.log(JSON.stringify({ service: "auth-controller", stage: "resend-verification-completed", correlationId, timestamp: new Date().toISOString(), status: 200, durationMs: Date.now() - startMs }));
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(JSON.stringify({ service: "auth-controller", stage: "resend-verification-failed", correlationId, timestamp: new Date().toISOString(), status: (err.statusCode || 500), durationMs: Date.now() - startMs }));
+    throw err;
+  }
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {

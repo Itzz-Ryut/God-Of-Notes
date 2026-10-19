@@ -219,7 +219,7 @@ const verifyEmail = async ({ email, otp }) => {
   };
 };
 
-const resendVerification = async ({ email }) => {
+const resendVerification = async ({ email }, correlationId) => {
   if (typeof email !== "string") {
     throw new AppError(400, ERROR_CODES.VALIDATION_ERROR, "Email is required");
   }
@@ -278,6 +278,7 @@ const resendVerification = async ({ email }) => {
   await sendVerificationOtp({
     email: user.email,
     otp,
+    correlationId: correlationId || "none",
   });
 
   return {
