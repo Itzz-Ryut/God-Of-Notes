@@ -10,6 +10,7 @@ import generateOAuthState from "./oauthState.js";
 import AppError from "../../errors/AppError.js";
 import ERROR_CODES from "../../errors/errorCodes.js";
 
+import env from "../../config/env.js";
 import { setAccessTokenCookie, clearAccessTokenCookie, } from "./auth.cookie.js";
 
 import { log } from "console";
@@ -108,9 +109,7 @@ const googleCallback = asyncHandler(
       result.accessToken,
     )
 
-    res.status(200).json({
-      user: result.user,
-    });
+    res.redirect(env.frontendUrl);
   },
 );
 

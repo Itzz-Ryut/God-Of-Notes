@@ -9,10 +9,9 @@ import { authApi } from './auth.api.js'
  * navigation and never handles OAuth secrets.
  *
  * After Google completes, the backend `GET /api/auth/google/callback` sets the
- * HttpOnly `access_token` cookie and returns JSON `{ user }` (it does not
- * redirect back to this SPA). Returning to the app lets the existing
- * AuthProvider session restoration recognize the cookie-holder as
- * authenticated.
+ * HttpOnly `access_token` cookie and redirects to the frontend (`env.frontendUrl`).
+ * The frontend AuthProvider session restoration recognizes the cookie-holder
+ * as authenticated after the redirect.
  */
 function GoogleAuthButton({ label = 'Continue with Google' }) {
   const handleClick = (e) => {
