@@ -22,6 +22,7 @@ const env = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || null,
   googleRedirectUri: process.env.GOOGLE_REDIRECT_URI || null,
   frontendUrl: process.env.FRONTEND_URL,
+  resendApiKey: process.env.RESEND_API_KEY || null,
 
   // 17.8 Phase 6: how often the background scheduler runs the 7-day orphan
   // cleanup. Optional — falls back to once every 24 hours.

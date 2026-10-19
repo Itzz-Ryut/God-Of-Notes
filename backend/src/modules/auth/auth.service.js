@@ -383,10 +383,14 @@ const forgotPassword = async ({ email }) => {
     expiresAt,
   });
 
-  await sendPasswordResetEmail({
-    email: user.email,
-    resetToken,
-  });
+  try {
+    await sendPasswordResetEmail({
+      email: user.email,
+      resetToken,
+    });
+  } catch {
+    // Preserve account-enumeration protection: do not reveal delivery failure.
+  }
 
   return {
     message:
