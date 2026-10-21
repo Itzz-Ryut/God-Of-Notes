@@ -1183,6 +1183,13 @@ body {
   color: var(--app-accent);
 }
 
+.document-toolbar-button-active {
+  background: var(--app-accent);
+  color: #fff;
+  border-color: var(--app-accent-strong);
+  font-weight: 600;
+}
+
 .document-editor-editable .ProseMirror {
   outline: none;
   min-height: 12rem;
