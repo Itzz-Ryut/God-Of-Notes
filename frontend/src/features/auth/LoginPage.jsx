@@ -83,10 +83,14 @@ function LoginPage() {
     } catch (err) {
       setFieldErrors(getAuthFieldErrors(err));
       const normalizedIdentifier = identifier.trim();
-      const isNotVerified = err instanceof ApiError && err.code === 'EMAIL_NOT_VERIFIED';
-      const isEmail = normalizedIdentifier.includes('@');
+      const isNotVerified =
+        err instanceof ApiError && err.code === "EMAIL_NOT_VERIFIED";
+      const isEmail = normalizedIdentifier.includes("@");
       const verifyLink = isNotVerified ? (
-        <Link to="/verify-email" state={isEmail ? { email: normalizedIdentifier } : undefined}>
+        <Link
+          to='/verify-email'
+          state={isEmail ? { email: normalizedIdentifier } : undefined}
+        >
           Verify your email
         </Link>
       ) : null;
@@ -98,10 +102,10 @@ function LoginPage() {
           {isNotVerified && (
             <>
               <br />
-              {verifyLink || 'Please verify your email before signing in.'}
+              {verifyLink || "Please verify your email before signing in."}
             </>
           )}
-        </>
+        </>,
       );
     } finally {
       setIsSubmitting(false);
@@ -112,6 +116,25 @@ function LoginPage() {
     <div className='auth-page'>
       <div className='auth-card'>
         <h1 className='auth-brand'>GoD of NOTES</h1>
+
+        <div className='demo-access-notice'>
+          <div className='demo-access-heading'>
+            <span className='demo-access-icon'>ⓘ</span>
+            <strong>Demo access</strong>
+          </div>
+
+          <p>
+            This project is currently in development. For the best demo
+            experience, sign in with Google. Password-based access is not
+            currently available.
+          </p>
+
+          <p className='demo-access-hint'>
+            If sign-in fails, check your browser's cookie settings or try
+            another browser.
+          </p>
+        </div>
+
         <h2 className='auth-title'>Sign in</h2>
 
         {formError && (

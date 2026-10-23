@@ -775,6 +775,55 @@ body {
   margin-top: 0.5rem;
 }
 
+
+/* Demo access notice */
+.demo-access-notice {
+  padding: 14px 16px;
+  margin-bottom: 20px;
+
+  background: color-mix(in srgb, var(--border) 30%, var(--input-bg));
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.demo-access-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 8px;
+
+  color: var(--accent-strong);
+  font-size: 14px;
+}
+
+.demo-access-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--accent);
+  font-size: 17px;
+}
+
+.demo-access-notice p {
+  margin: 0;
+  color: var(--text);
+}
+
+.demo-access-hint {
+  margin-top: 8px !important;
+  color: var(--muted) !important;
+  font-size: 12px;
+}
+
+
 /*
  * F4.1 — Documents pages (data-backed).
  *
